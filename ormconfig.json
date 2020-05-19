@@ -7,5 +7,5 @@
   "database": "ideas",
   "synchronize": true,
   "logging": true,
-  "entities": ["./dist/idea/idea.entity.js"]
+  "entities": ["./dist/**/*.entity.js"]
 }

@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
 import { IdeaService } from './idea.service';
 import { IdeaDto } from './idea.dto';
 import { ValidationPipe } from '../shared/validation.pipe';
+import { AuthGuard } from '../shared/auth.guard';
+import { User } from '../user/user.decorator';
 
-@Controller('idea')
+@Controller('api/ideas')
 export class IdeaController {
   constructor(private ideaService: IdeaService) {
   }
@@ -14,9 +16,10 @@ export class IdeaController {
   }
 
   @Post()
+  @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
-  createIdea(@Body() data: IdeaDto) {
-    return this.ideaService.create(data);
+  createIdea(@User('id') user, @Body() data: IdeaDto) {
+    return this.ideaService.create(user, data);
   }
 
   @Get(':id')
